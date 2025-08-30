@@ -43,9 +43,11 @@ router.post("/login", async (req, res) => {
     const validpassword = await bcrypt.compare(password, user.password);
 
     if (validpassword) {
-      const token = await jwt.sign({ _id: user._id }, "Akshay@27");
+      const token = await jwt.sign({ _id: user._id }, "Akshay@27",{
+        expiresIn: "7d"
+      });
 
-      res.cookie("token", token);
+      res.cookie("token", token,{  expires: new Date(Date.now() + 3 * 60 * 60 * 1000)});
       res.send("Login Successfull");
     } else {
       throw new Error("Invalid Credentials");
@@ -54,5 +56,13 @@ router.post("/login", async (req, res) => {
     res.status(400).send("Error : " + err.message);
   }
 });
+
+//Logout
+router.post("/logout" , async(req,res) => {
+    res.cookie("token",null,{
+        expires: new Date(Date.now())
+    })
+    res.send("Logout Successfully!!!")
+})
 
 module.exports = router
