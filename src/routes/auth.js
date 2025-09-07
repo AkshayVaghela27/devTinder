@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
       });
 
       res.cookie("token", token,{  expires: new Date(Date.now() + 3 * 60 * 60 * 1000)});
-      res.send("Login Successfull");
+      res.send(user);
     } else {
       throw new Error("Invalid Credentials");
     }
