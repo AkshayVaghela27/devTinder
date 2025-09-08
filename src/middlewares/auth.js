@@ -8,22 +8,21 @@ const UserAuth = async (req, res, next) => {
     const { token } = cookie;
 
     if (!token) {
-      throw new Error("Invalid token");
+      res.status(401).send("Please Login");
     }
 
-    const decodemsg = jwt.verify(token,"Akshay@27")
+    const decodemsg = jwt.verify(token, "Akshay@27");
 
-    const {_id} = decodemsg
+    const { _id } = decodemsg;
 
-    const user = await User.findById(_id)
+    const user = await User.findById(_id);
 
-    req.user = user
+    req.user = user;
 
-    next()
-
+    next();
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
 };
 
-module.exports = {UserAuth}
+module.exports = { UserAuth };
