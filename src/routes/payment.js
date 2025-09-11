@@ -1,6 +1,6 @@
 const express = require("express");
 const { UserAuth } = require("../middlewares/auth");
-const paymentRouter = express.Router();
+const router = express.Router();
 const razorpayInstance = require("../utils/payment");
 const Payment = require("../models/payment");
 const User = require("../models/user");
@@ -9,7 +9,7 @@ const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
 
-paymentRouter.post("/payment/create", UserAuth, async (req, res) => {
+router.post("/payment/create", UserAuth, async (req, res) => {
   try {
     const { membershipType } = req.body;
     const { firstName, lastName, emailId } = req.user;
@@ -48,7 +48,7 @@ paymentRouter.post("/payment/create", UserAuth, async (req, res) => {
   }
 });
 
-paymentRouter.post("/payment/webhook", async (req, res) => {
+router.post("/payment/webhook", async (req, res) => {
   try {
     console.log("Webhook Called");
     const webhookSignature = req.get("X-Razorpay-Signature");
@@ -96,7 +96,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   }
 });
 
-paymentRouter.get("/payment/premium/verify", UserAuth, async (req, res) => {
+router.get("/payment/premium/verify", UserAuth, async (req, res) => {
   const user = req.user.toJSON();
   console.log(user);
   if (user.isPremium) {
@@ -105,4 +105,4 @@ paymentRouter.get("/payment/premium/verify", UserAuth, async (req, res) => {
   return res.json({ ...user });
 });
 
-module.exports = paymentRouter;
+module.exports = router;
